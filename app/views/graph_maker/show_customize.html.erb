@@ -7,7 +7,7 @@
   ● カスタムクエリを追加・修正する事により、グラフを自由に追加・修正する事ができます。
 </p>
 <% @queries.each_with_index do |query, i| %>
-  <% if query.user_id == User.current.id || query.is_public %>
+  <% if query.user_id == User.current.id || query.visibility %>
     <% if query.group_by == nil || query.group_by == "" %>
       <h4><%= query.name + '(グループ条件:無し)' %></h4>
       グラフ無し(グループ条件が指定無しのため)
