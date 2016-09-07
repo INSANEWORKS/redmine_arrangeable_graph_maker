@@ -14,15 +14,12 @@ class TrendGraph
   end
 
   def count(target_month)
-    created_issues = Issue.find(:all,
-                                :select => :created_on,
-                                :order => "created_on ASC",
-                                :conditions => ["project_id = ? and " +
-                                                "created_on >= ? and " +
-                                                "created_on < ? ",
-                                                @project_id,
-                                                target_month,
-                                                target_month + 1.month])
+    created_issues = Issue.where(["project_id = ? and " +
+                                  "created_on >= ? and " +
+                                  "created_on < ? ",
+                                  @project_id,
+                                  target_month,
+                                  target_month + 1.month]).order(created_on: :desc)
 
     count_each_time = Array.new(@item_count,0)
     created_issues.each do |issue|

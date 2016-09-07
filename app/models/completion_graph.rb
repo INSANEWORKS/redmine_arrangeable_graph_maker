@@ -22,19 +22,16 @@ class CompletionGraph
   end
 
   def count(intervals, target_month)
-    closed_statuses = IssueStatus.find_all_by_is_closed(true)
-    closed_journals = Journal.find(:all,
-                                   :include => [:issue, :details],
-                                   :conditions => 
-                                     [ "issues.project_id = ? and " +
-                                       "journal_details.prop_key = 'status_id' and " +
-                                       "journal_details.value IN ( ? ) and " +
-                                       "journals.created_on >= ? and " +
-                                       "journals.created_on < ? ",
-                                       @project_id,
-                                       closed_statuses,
-                                       target_month,
-                                       target_month + 1.month] )
+    closed_statuses = IssueStatus.find_by_is_closed(true)
+    closed_journals = Journal.joins(:issue, :details).where([ "issues.project_id = ? and " +
+                                                              "journal_details.prop_key = 'status_id' and " +
+                                                              "journal_details.value IN ( ? ) and " +
+                                                              "journals.created_on >= ? and " +
+                                                              "journals.created_on < ? ",
+                                                              @project_id,
+                                                              closed_statuses,
+                                                              target_month,
+                                                              target_month + 1.month] )
     completion_times = calculate_completion_times(closed_journals)
     count_each_interval = get_count_each_interval(completion_times, intervals)
     return count_each_interval

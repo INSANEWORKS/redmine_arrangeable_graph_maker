@@ -30,7 +30,7 @@ class GraphMakerController < ApplicationController
   include SortHelper
  
   def show_customize
-    @queries = Query.find_all_by_project_id(@project.id)
+    @queries = Query.where(project_id: @project)
     @group_labels = @queries.map do |query|
       next if query.user_id != User.current.id && !query.visibility
       if query.group_by =~ /cf_(\d+)/

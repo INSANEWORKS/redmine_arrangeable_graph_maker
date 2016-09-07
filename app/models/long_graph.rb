@@ -15,13 +15,12 @@ class LongGraph
 
   def count
     12.times do |num| 
-      issue_counts = Issue.count(:group => "tracker_id",
-                                 :conditions => [ "project_id = ? and " +
-                                                  "created_on >= ? and " +
-                                                  "created_on < ?",
-                                                  @project_id,
-                                                  @start_date + num.months,
-                                                  @start_date + (num + 1).months ])
+      issue_counts = Issue.where(["project_id = ? and " +
+                                  "created_on >= ? and " +
+                                  "created_on < ?",
+                                  @project_id,
+                                  @start_date + num.months,
+                                  @start_date + (num + 1).months ]).group(:tracker_id).count
 
       @project_trackers.each do |tracker|
         count = issue_counts[tracker.id]
