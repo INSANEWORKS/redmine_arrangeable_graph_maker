@@ -153,7 +153,7 @@ class GraphMakerController < ApplicationController
 
   def get_customize_graph
     retrieve_query
-    @issue_count_by_group = @query.issue_count_by_group
+    @issue_count_by_group = @query.result_count_by_group
 
     graph = CustomizedGraph.new(@query.name,
                                 600, 
